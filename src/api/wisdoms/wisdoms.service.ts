@@ -18,8 +18,7 @@ export class WisdomsService {
         return final[0].toUpperCase() + final.slice(1);
     };
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    async getWisdom(req: WisdomsRequest, _origin: string): Promise<WisdomResponse> {
+    async getWisdom(req: WisdomsRequest): Promise<WisdomResponse> {
         const localWisdoms = wisdomParts[req.lang || "en"];
         const randomWisdom = this.randomWisdom(localWisdoms);
 
@@ -28,8 +27,7 @@ export class WisdomsService {
         });
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    async getWisdoms(req: WisdomsRequest, _origin: string): Promise<WisdomsResponse> {
+    async getWisdoms(req: WisdomsRequest): Promise<WisdomsResponse> {
         const localWisdoms = wisdoms[req.lang || "en"];
 
         return Promise.resolve({

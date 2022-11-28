@@ -6,11 +6,11 @@ import {
     NestInterceptor
 } from "@nestjs/common";
 import { map, catchError, throwError } from "rxjs";
-import type { Request, Response } from "express";
 import { Reflector } from "@nestjs/core";
-import { obtainRequestId } from "@middlewares";
 import { ok } from "@toplo/common";
-import { HotLogger, HotWatch, IHotLogger } from "@toplo/api";
+import { HotLogger, IHotLogger } from "@toplo/api";
+import { FastifyReply, FastifyRequest } from "fastify";
+import { v4 } from "uuid";
 
 @Injectable()
 export class HttpInterceptor implements NestInterceptor {
@@ -21,7 +21,6 @@ export class HttpInterceptor implements NestInterceptor {
     }
 
     intercept(context: ExecutionContext, next: CallHandler) {
-        const sw = new HotWatch();
         const instance = context.getClass();
         const handler = context.getHandler();
         // Order matters, we want handlers to override the class decorator
@@ -34,9 +33,10 @@ export class HttpInterceptor implements NestInterceptor {
 
         const codeContext = `${instance.name}/${handler.name}`;
         this.log = HotLogger.createLogger(codeContext);
-        const [req, resp] = context.getArgs<[Request<unknown, unknown, { requestId?: string }>, Response]>();
+        const [req, resp] = context.getArgs<[FastifyRequest<{ Body?: { requestId?: string } }>, FastifyReply]>();
         const eventName = req.url.split("?")?.[0];
-        const requestId = obtainRequestId(req);
+        console.log("IS ACTUALLY IN HERADER", req.headers["x-request-id"]);
+        const requestId = req.body?.requestId || req.headers["x-request-id"] as string || v4();
 
         this.log.info("Request received", {
             requestId,
@@ -58,7 +58,7 @@ export class HttpInterceptor implements NestInterceptor {
                         requestId,
                         eventName,
                         method: req.method,
-                        duration: sw.getElapsedMs(),
+                        duration: resp.getResponseTime(),
                         data: {
                             request: {
                                 body: req.body,
@@ -88,7 +88,7 @@ export class HttpInterceptor implements NestInterceptor {
                         requestId,
                         eventName,
                         method: req.method,
-                        duration: sw.getElapsedMs(),
+                        duration: resp.getResponseTime(),
                         err,
                         stack: err.stack,
                         data: {

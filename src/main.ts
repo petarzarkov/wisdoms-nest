@@ -1,34 +1,30 @@
 if (process.env.NODE_ENV !== "production") {
-    /**
-     * Here for debugging purposes,
-     * although nest ConfigModule imports it - we need to do earlier here as some of our casino packages can instantly process env vars
-     */
+    // Here for debugging purposes
     try {
         require("dotenv/config");
-    // eslint-disable-next-line no-empty
     } catch (error) {
-
+        console.error("Error importing dotenv/config", { error });
     }
 }
 import { NestFactory } from "@nestjs/core";
-import { NestExpressApplication } from "@nestjs/platform-express";
 import { AppModule } from "./app.module";
 import { API_BEARER_AUTH_DEFAULT_NAME, API_BEARER_AUTH_DEFAULT_TOKEN, DefaultConfig } from "@const";
 import { ConfigService } from "@nestjs/config";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
-import { RequestIdMiddleware } from "@middlewares";
+// import { RequestIdMiddleware } from "@middlewares";
 import { HttpInterceptor } from "@interceptors/http.interceptor";
 import { ValidationPipe } from "@nestjs/common";
+import { NestFastifyApplication, FastifyAdapter } from "@nestjs/platform-fastify";
+// import { v4 } from "uuid";
 
 async function bootstrap(module: typeof AppModule) {
-    const app = await NestFactory.create<NestExpressApplication>(module, {
-        cors: true,
-        bufferLogs: false,
-        // logger: new CasinoLogger("play-data-service")
-    });
+    const app = await NestFactory.create<NestFastifyApplication>(module, new FastifyAdapter({
+        requestIdHeader: "x-request-id",
+        // requestIdLogLabel: "x-request-id",
+        // genReqId: () => v4()
+    }));
+
     app.enableShutdownHooks();
-    // eslint-disable-next-line @typescript-eslint/unbound-method
-    app.use(new RequestIdMiddleware().use);
     app.useGlobalInterceptors(new HttpInterceptor());
     app.useGlobalPipes(new ValidationPipe({
         transform: true,
@@ -72,7 +68,7 @@ async function bootstrap(module: typeof AppModule) {
     });
 
     const port = configService.get("app.port", { infer: true });
-    await app.listen(port);
+    await app.listen(port, "0.0.0.0");
 }
 
 void bootstrap(AppModule);

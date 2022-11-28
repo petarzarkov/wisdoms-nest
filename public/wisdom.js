@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 const getRandomEmote = async (size = "1x") => {
     const res = await (await fetch("https://api.betterttv.net/3/emotes/shared/trending?offset=0&limit=50")).json();
     const random = res[Math.floor(Math.random() * Math.floor(res.length))];
