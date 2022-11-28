@@ -1,5 +1,6 @@
 {
     "version": 2,
+    "outputDirectory": "build",
     "builds": [
         {
             "src": "src/main.ts",
@@ -9,7 +10,7 @@
     "routes": [
         {
             "src": "/(.*)",
-            "dest": "build/main.js",
+            "dest": "src/main.ts",
             "methods": [
                 "GET",
                 "POST",
