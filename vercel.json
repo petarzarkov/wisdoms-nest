@@ -17,8 +17,8 @@
     ],
     "rewrites": [
         {
-            "src": "/(.*)",
-            "dest": "/build/main.js"
+            "source": "/(.*)",
+            "destination": "/build/main.js"
         }
     ]
 }
