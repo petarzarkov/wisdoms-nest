@@ -1,7 +1,7 @@
 import {
     CallHandler,
     ExecutionContext,
-    HttpStatus,
+    HttpException,
     Injectable,
     NestInterceptor
 } from "@nestjs/common";
@@ -9,15 +9,8 @@ import { map, catchError, throwError } from "rxjs";
 import type { Request, Response } from "express";
 import { Reflector } from "@nestjs/core";
 import { obtainRequestId } from "@middlewares";
-import { fail, ok } from "@toplo/common";
+import { ok } from "@toplo/common";
 import { HotLogger, HotWatch, IHotLogger } from "@toplo/api";
-
-export type InterceptedError = Partial<Error> & {
-    errors?: { message: string }[];
-    response?: Record<string, unknown>;
-    responseDetails?: Record<string, unknown>;
-    overrideStatus?: HttpStatus;
-};
 
 @Injectable()
 export class HttpInterceptor implements NestInterceptor {
@@ -103,6 +96,7 @@ export class HttpInterceptor implements NestInterceptor {
                                 body: req.body,
                                 query: req.query
                             },
+                            error: err
                         }
                     });
 
@@ -113,11 +107,13 @@ export class HttpInterceptor implements NestInterceptor {
             );
     }
 
-    errorResponse(_error: Error, requestId: string) {
-        return {
+    errorResponse(error: Error, requestId: string) {
+        const errRes = (error as { response?: Record<string, unknown> })?.response;
+
+        return new HttpException({
             requestId,
-            ...fail("Interal Error")
-        };
+            ...errRes
+        }, errRes?.status as number || 500);
     }
 
 }

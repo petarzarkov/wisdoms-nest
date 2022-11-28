@@ -3,16 +3,8 @@ import { WisdomsRequest } from "./entities/wisdoms.request";
 import { WisdomResponse, WisdomsResponse } from "./entities/wisdoms.response";
 import { wisdoms, wisdomParts } from "@const";
 
-// import { DefaultConfig } from "@const";
-// import { ConfigService } from "@nestjs/config";
-
 @Injectable()
 export class WisdomsService {
-
-    // constructor(
-    //     private config: ConfigService<DefaultConfig, true>
-    // ) { }
-
     getRandomN(l: number) {
         return Math.floor(Math.random() * Math.floor(l)) + 1;
     }

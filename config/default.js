@@ -11,6 +11,11 @@ module.exports = {
                 "/service/healthcheck",
                 "/service/upcheck"
             ]
+        }, {
+            key: "event",
+            values: [
+                "/healthcheck"
+            ]
         }],
         serializers: [{
             key: "eventName",

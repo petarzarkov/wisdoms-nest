@@ -21,3 +21,8 @@ export const WISDOMS_ROUTE = process.env.WISDOMS_ROUTE || "wisdoms";
 export const WISDOM_ROUTE = process.env.WISDOM_ROUTE || "wisdom";
 
 export const REQUEST_ID_HEADER_NAME = "x-request-id";
+
+/**
+ * @default 600,000 ("10min")
+ */
+export const WAKE_UP_INTERVAL = Number(process.env.WAKE_UP_INTERVAL) || 10 * 60 * 1000;

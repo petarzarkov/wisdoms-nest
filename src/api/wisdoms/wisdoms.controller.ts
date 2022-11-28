@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/indent */
-/* eslint-disable @typescript-eslint/require-await */
 import { Controller, Get, HttpCode, HttpStatus, Query } from "@nestjs/common";
 import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { WisdomsRequest } from "./entities/wisdoms.request";
