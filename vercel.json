@@ -3,14 +3,14 @@
     "outputDirectory": "build",
     "builds": [
         {
-            "src": "src/main.ts",
+            "src": "build/main.js",
             "use": "@vercel/node"
         }
     ],
     "routes": [
         {
             "src": "/(.*)",
-            "dest": "src/main.ts",
+            "dest": "build/main.js",
             "methods": [
                 "GET",
                 "POST",
