@@ -1,5 +1,4 @@
 {
-    "version": 2,
     "buildCommand": "npm run build",
     "installCommand": "pnpm install",
     "outputDirectory": "build",
@@ -9,10 +8,6 @@
         "PUT",
         "DELETE"
     ],
-    "functions": {
-        "src": "./build/main.js",
-        "use": "@vercel/node"
-    },
     "rewrites": [
         {
             "source": "/(.*)",
