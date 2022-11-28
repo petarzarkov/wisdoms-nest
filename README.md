@@ -1,6 +1,6 @@
-## Deployed
-- [App](https://wisdoms-nest.vercel.app/)
-- [API docs](https://wisdoms-nest.vercel.app/api)
+## Check it out here
+- [App](https://wisdoms-app.onrender.com/)
+- [API docs](https://wisdoms-app.onrender.com/api)
 
 <div align="center">
     <h1>🔥 Wisdoms App 🔥</h1>
