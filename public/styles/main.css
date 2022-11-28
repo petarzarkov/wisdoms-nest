@@ -1,0 +1,106 @@
+html {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #2d3436;
+  background-image: linear-gradient(315deg, #2d3436 0%, #000000 74%);
+}
+
+body {
+  max-width: 90%;
+  margin: auto;
+}
+
+h1 {
+  color: rgb(236 213 185);
+  font-family: 'Cookie', cursive;
+  font-size: 35px;
+  font-weight: bold;
+  letter-spacing: -1px;
+  line-height: 1;
+  text-align: center;
+  text-shadow:
+  -1px -1px 0 #c7987b,
+  -2px -2px 0 #a88973,
+  -3px -3px 0 #f0bfa1,
+  -30px 20px 40px #49070363;
+}
+
+.wisdom {
+  background-color: #e6e6e6;
+  padding: 10px;
+  font-size: 30px;
+  margin: 5px;
+  border-radius: 10px;
+}
+
+.buttons {
+  background: #222;
+  height: 50px;
+  min-width: 150px;
+  border: none;
+  border-radius: 10px;
+  color: #eee;
+  font-size: 30px;
+  font-family: 'Cookie', cursive;
+  position: relative;
+  transition: 1s;
+  -webkit-tap-highlight-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding-top: 5px;
+  margin: 5px;
+}
+
+a.buttons:hover {
+  background: transparent;
+  background-image: url("/images/f-1x.gif");
+  border: 3px solid #000000;
+}
+
+p.buttonsText {
+  background: rgba(34, 34, 34, 0.507);
+  border: none;
+  border-radius: 10px;
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 140px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px;
+  position: absolute;
+  z-index: 1;
+  bottom: 150%;
+  left: 50%;
+  margin-left: -75px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tooltip .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}

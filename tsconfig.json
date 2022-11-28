@@ -1,0 +1,60 @@
+{
+    "compilerOptions": {
+        "module": "CommonJS",
+        "target": "ES2020",
+        "skipLibCheck": true,
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "resolveJsonModule": true,
+        "sourceMap": false,
+        "declaration": false,
+        "strict": true,
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "forceConsistentCasingInFileNames": true,
+        "strictNullChecks": true,
+        "alwaysStrict": true,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "noUnusedParameters": true,
+        "noUnusedLocals": true,
+        "strictPropertyInitialization": false,
+        "moduleResolution": "node",
+        "watch": false,
+        "baseUrl": ".",
+        "incremental": false,
+        "removeComments": false,
+        "paths": {
+            "@api/*": [
+                "./src/api/*"
+            ],
+            "@middlewares": [
+                "./src/middlewares"
+            ],
+            "@contracts": [
+                "./src/contracts"
+            ],
+            "@const": [
+                "./src/const"
+            ],
+            "@repos": [
+                "./src/repos"
+            ],
+            "@models/*": [
+                "./src/models/*"
+            ],
+            "@modules/*": [
+                "./src/modules/*"
+            ],
+            "@utils": [
+                "./src/utils"
+            ],
+            "@interceptors/*": [
+                "./src/interceptors/*"
+            ],
+            "@decorators/*": [
+                "./src/decorators/*"
+            ]
+        }
+    }
+}
