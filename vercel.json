@@ -2,12 +2,6 @@
     "buildCommand": "npm run build",
     "installCommand": "pnpm install",
     "outputDirectory": "build",
-    "headers": [
-        "GET",
-        "POST",
-        "PUT",
-        "DELETE"
-    ],
     "rewrites": [
         {
             "source": "/(.*)",
