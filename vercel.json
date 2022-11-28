@@ -9,12 +9,10 @@
         "PUT",
         "DELETE"
     ],
-    "functions": [
-        {
-            "src": "./build/main.js",
-            "use": "@vercel/node"
-        }
-    ],
+    "functions": {
+        "src": "./build/main.js",
+        "use": "@vercel/node"
+    },
     "rewrites": [
         {
             "source": "/(.*)",
