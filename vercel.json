@@ -1,6 +1,7 @@
 {
-    "buildCommand": "npm run build",
     "installCommand": "pnpm install",
+    "buildCommand": "npm run build",
+    "framework": "other",
     "outputDirectory": "build",
     "rewrites": [
         {
