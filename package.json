@@ -23,6 +23,7 @@
         "start": "nest start",
         "prebuild": "rimraf build",
         "build": "nest build -p tsconfig.build.json",
+        "vercel-build": "npm run build",
         "dev": "nest start --watch",
         "lint": "tsc --noEmit && eslint -c .eslintrc.js --ext .ts,.tsx ./src --max-warnings 0",
         "lint:fix": "npm run lint -- --fix"
