@@ -10,7 +10,6 @@ import { Reflector } from "@nestjs/core";
 import { ok } from "@toplo/common";
 import { HotLogger, IHotLogger } from "@toplo/api";
 import { FastifyReply, FastifyRequest } from "fastify";
-import { v4 } from "uuid";
 
 @Injectable()
 export class HttpInterceptor implements NestInterceptor {
@@ -35,8 +34,7 @@ export class HttpInterceptor implements NestInterceptor {
         this.log = HotLogger.createLogger(codeContext);
         const [req, resp] = context.getArgs<[FastifyRequest<{ Body?: { requestId?: string } }>, FastifyReply]>();
         const eventName = req.url.split("?")?.[0];
-        console.log("IS ACTUALLY IN HERADER", req.headers["x-request-id"]);
-        const requestId = req.body?.requestId || req.headers["x-request-id"] as string || v4();
+        const requestId = req.body?.requestId || req.headers["x-request-id"] as string || req.id as string;
 
         this.log.info("Request received", {
             requestId,

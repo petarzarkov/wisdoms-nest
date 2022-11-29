@@ -11,17 +11,16 @@ import { AppModule } from "./app.module";
 import { API_BEARER_AUTH_DEFAULT_NAME, API_BEARER_AUTH_DEFAULT_TOKEN, DefaultConfig } from "@const";
 import { ConfigService } from "@nestjs/config";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
-// import { RequestIdMiddleware } from "@middlewares";
 import { HttpInterceptor } from "@interceptors/http.interceptor";
 import { ValidationPipe } from "@nestjs/common";
 import { NestFastifyApplication, FastifyAdapter } from "@nestjs/platform-fastify";
-// import { v4 } from "uuid";
+import { v4 } from "uuid";
+import { RequestIdMiddleware } from "@interceptors/request-id.middleware";
 
 async function bootstrap(module: typeof AppModule) {
     const app = await NestFactory.create<NestFastifyApplication>(module, new FastifyAdapter({
         requestIdHeader: "x-request-id",
-        // requestIdLogLabel: "x-request-id",
-        // genReqId: () => v4()
+        genReqId: () => v4()
     }));
 
     app.enableShutdownHooks();
@@ -30,6 +29,8 @@ async function bootstrap(module: typeof AppModule) {
         transform: true,
         transformOptions: { enableImplicitConversion: true },
     }));
+    // eslint-disable-next-line @typescript-eslint/unbound-method
+    app.use(new RequestIdMiddleware().use);
     const configService = app.get<ConfigService<DefaultConfig, true>>(ConfigService);
     const apiPath = configService.get("app.apiPath", { infer: true });
 
