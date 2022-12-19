@@ -1,12 +1,12 @@
 ## Check it out here
-- [App](https://wisdoms-app.onrender.com/)
-- [API docs](https://wisdoms-app.onrender.com/api)
+- [App](https://wisdoms-nest-production.up.railway.app/)
+- [API docs](https://wisdoms-nest-production.up.railway.app/api)
 
 <div align="center">
     <h1>🔥 Wisdoms App 🔥</h1>
 	<p>Constructs random widoms in english or bulgarian</p>
-    <a href="https://github.com/petarzarkov/toplo/actions/"><img src="https://github.com/petarzarkov/toplo/actions/workflows/build.yml/badge.svg?branch=main" alt="Build status"></a>
-	<a href="https://github.com/petarzarkov/toplo/blob/main/LICENSE"><img src="https://img.shields.io/github/license/petarzarkov/toplo" alt="License"></a>
+    <a href="https://github.com/petarzarkov/wisdoms-nest/actions/"><img src="https://github.com/petarzarkov/wisdoms-nest/actions/workflows/build.yml/badge.svg?branch=main" alt="Build status"></a>
+	<a href="https://github.com/petarzarkov/wisdoms-nest/blob/main/LICENSE"><img src="https://img.shields.io/github/license/petarzarkov/wisdoms-nest" alt="License"></a>
     <p style="color: gray;">Stack</p>
     <a href="https://nestjs.com/" title="NestJS"><img src="https://nestjs.com/favicon.264d6486.ico" alt="NestJS" width="26px" height="26px"></a>
     <a href="https://pnpm.io/" target="blank"><img title="pnpm" alt="pnpm" width="26" src="https://pnpm.io/img/favicon.png" /></a>

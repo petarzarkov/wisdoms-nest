@@ -7,7 +7,7 @@ import { ServiceModule } from "@api/service/service.module";
 import { join } from "path";
 import config from "config";
 import { getHost } from "@utils";
-import { WakeUpModule } from "@modules/wake/wake-up.module";
+// import { WakeUpModule } from "@modules/wake/wake-up.module";
 
 @Module({
     imports: [
@@ -17,7 +17,7 @@ import { WakeUpModule } from "@modules/wake/wake-up.module";
         }),
         ServiceModule,
         WisdomsModule,
-        WakeUpModule,
+        // WakeUpModule,
         ServeStaticModule.forRoot({
             rootPath: join(__dirname, "..", "public"),
         }),
@@ -43,7 +43,7 @@ export class AppModule implements OnApplicationBootstrap {
                 `[APP] ${process.pid} - ${new Date().toLocaleString()} LOG ${`[${process.env.npm_package_name || "service"}]`} started on ${address}`
             );
 
-            new WakeUpModule().init(`http://${host}:${port}`);
+            // new WakeUpModule().init(`http://${host}:${port}`);
         }
 
     }
