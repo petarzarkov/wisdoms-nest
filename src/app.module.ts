@@ -1,4 +1,4 @@
-import { Inject, Module, OnApplicationBootstrap } from "@nestjs/common";
+import { ConsoleLogger, Module, OnApplicationBootstrap } from "@nestjs/common";
 import { ServeStaticModule } from "@nestjs/serve-static";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { WisdomsModule } from "./api/wisdoms/wisdoms.module";
@@ -7,7 +7,6 @@ import { ServiceModule } from "@api/service/service.module";
 import { join } from "path";
 import config from "config";
 import { getHost } from "@utils";
-// import { WakeUpModule } from "@modules/wake/wake-up.module";
 
 @Module({
     imports: [
@@ -17,17 +16,18 @@ import { getHost } from "@utils";
         }),
         ServiceModule,
         WisdomsModule,
-        // WakeUpModule,
         ServeStaticModule.forRoot({
             rootPath: join(__dirname, "..", "public"),
         }),
     ]
 })
 export class AppModule implements OnApplicationBootstrap {
+    #consoleLogger: ConsoleLogger;
     constructor(
-        @Inject(ConfigService)
         public configService: ConfigService<DefaultConfig, true>
-    ) { }
+    ) {
+        this.#consoleLogger = new ConsoleLogger("wisdoms-nest");
+    }
 
     async onApplicationBootstrap() {
         const port = Number(process.env.PORT) || (config?.has("servicePort") ? config?.get<number>("servicePort") : undefined);
@@ -38,11 +38,7 @@ export class AppModule implements OnApplicationBootstrap {
                 address += `/${this.configService.get("app.apiPath", { infer: true })}`;
             }
 
-            console.log(
-                "\x1b[35m",
-                `[APP] ${process.pid} - ${new Date().toLocaleString()} LOG ${`[${process.env.npm_package_name || "service"}]`} started on ${address}`
-            );
-
+            this.#consoleLogger.log(`Service started on ${address}`);
             // new WakeUpModule().init(`http://${host}:${port}`);
         }
 
