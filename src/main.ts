@@ -1,75 +1,84 @@
-if (process.env.NODE_ENV !== "production") {
-    // Here for debugging purposes
-    try {
-        require("dotenv/config");
-    } catch (error) {
-        console.error("Error importing dotenv/config", { error });
-    }
-}
-import { NestFactory } from "@nestjs/core";
-import { AppModule } from "./app.module";
-import { API_BEARER_AUTH_DEFAULT_NAME, API_BEARER_AUTH_DEFAULT_TOKEN, DefaultConfig } from "@const";
-import { ConfigService } from "@nestjs/config";
-import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
-import { HttpInterceptor } from "@interceptors/http.interceptor";
-import { ValidationPipe } from "@nestjs/common";
-import { NestFastifyApplication, FastifyAdapter } from "@nestjs/platform-fastify";
-import { v4 } from "uuid";
-import { RequestIdMiddleware } from "@interceptors/request-id.middleware";
+import 'dotenv/config';
+
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from './app.module';
+import { ConfigService } from '@nestjs/config';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { ConsoleLogger, ValidationPipe } from '@nestjs/common';
+import { NestFastifyApplication, FastifyAdapter } from '@nestjs/platform-fastify';
+import { v4 } from 'uuid';
+import { BEARER_TOKEN_DEFAULT, BEARER_TOKEN_DEFAULT_NAME, REQUEST_ID_HEADER_KEY, ValidatedConfig } from '@const';
+import { UnhandledRoutes } from '@filters/unhandled-routes';
+import { name, description, author, homepage, version } from '../package.json';
 
 async function bootstrap(module: typeof AppModule) {
-    const app = await NestFactory.create<NestFastifyApplication>(module, new FastifyAdapter({
-        requestIdHeader: "x-request-id",
-        genReqId: () => v4()
-    }));
+  const logger = new ConsoleLogger({
+    context: name,
+    json: true,
+  });
+  const app = await NestFactory.create<NestFastifyApplication>(
+    module,
+    new FastifyAdapter({
+      requestIdHeader: REQUEST_ID_HEADER_KEY,
+      genReqId: () => v4(),
+    }),
+    {
+      logger,
+    },
+  );
 
-    app.enableShutdownHooks();
-    app.useGlobalInterceptors(new HttpInterceptor());
-    app.useGlobalPipes(new ValidationPipe({
-        transform: true,
-        transformOptions: { enableImplicitConversion: true },
-    }));
-    // eslint-disable-next-line @typescript-eslint/unbound-method
-    app.use(new RequestIdMiddleware().use);
-    const configService = app.get<ConfigService<DefaultConfig, true>>(ConfigService);
-    const apiPath = configService.get("app.apiPath", { infer: true });
+  app.enableShutdownHooks();
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      transformOptions: { enableImplicitConversion: true },
+    }),
+  );
 
-    const bearerTokenSchema: Parameters<DocumentBuilder["addBearerAuth"]>[0] = {
-        type: "http",
-        in: "header",
-        scheme: "bearer"
-    };
+  const configService = app.get(ConfigService<ValidatedConfig, true>);
+  const appConfig = configService.get('app', { infer: true });
+  const appEnv = configService.get('env', { infer: true });
 
-    const config = new DocumentBuilder()
-        .addBearerAuth(bearerTokenSchema, API_BEARER_AUTH_DEFAULT_NAME)
-        .setTitle(process.env.npm_package_name || process.env.npm_package_description as string)
-        .setVersion(process.env.npm_package_version as string);
+  app.useGlobalFilters(new UnhandledRoutes());
 
-    if (process.env.npm_package_description) {
-        config.setDescription(process.env.npm_package_description);
-    }
+  app.enableShutdownHooks();
 
-    config.setContact(
-        process.env.npm_package_author_name as string,
-        process.env.npm_package_homepage as string,
-        process.env.npm_package_author_email as string
-    );
+  const bearerTokenSchema: Parameters<DocumentBuilder['addBearerAuth']>[0] = {
+    type: 'http',
+    in: 'header',
+    scheme: 'bearer',
+  };
 
-    const document = SwaggerModule.createDocument(app, config.build());
-    SwaggerModule.setup(apiPath, app, document, {
-        // This is so we are automatically authorized in swagger with some default value for the Bearer token
-        swaggerOptions: {
-            authAction: {
-                [API_BEARER_AUTH_DEFAULT_NAME]: {
-                    schema: bearerTokenSchema,
-                    value: Buffer.from(API_BEARER_AUTH_DEFAULT_TOKEN).toString("base64"),
-                },
-            },
+  const config = new DocumentBuilder()
+    .setTitle(name)
+    .setVersion(version)
+    .setDescription(description)
+    .setContact(author.name, homepage, author.email)
+    .addBearerAuth(bearerTokenSchema, BEARER_TOKEN_DEFAULT_NAME);
+
+  const document = SwaggerModule.createDocument(app, config.build());
+
+  SwaggerModule.setup(appConfig.docs.apiPath, app, document, {
+    customSiteTitle: `NestJS Wisdoms API ${appEnv}`,
+    customCss: '.swagger-ui .topbar { display: none }',
+    // This is so we are automatically authorized in swagger with some default value for the Bearer token
+    swaggerOptions: {
+      authAction: {
+        [BEARER_TOKEN_DEFAULT_NAME]: {
+          schema: bearerTokenSchema,
+          value: Buffer.from(BEARER_TOKEN_DEFAULT).toString('base64'),
         },
-    });
+      },
+    },
+  });
 
-    const port = configService.get("app.port", { infer: true });
-    await app.listen(port, "0.0.0.0");
+  app.enableCors();
+
+  await app.listen(appConfig.port, '0.0.0.0');
+
+  const appUrl = await app.getUrl();
+  logger.log(`Application started at ${appUrl}`);
+  logger.log(`API Docs at ${appUrl}/${appConfig.docs.apiPath}`);
 }
 
 void bootstrap(AppModule);

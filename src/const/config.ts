@@ -1,30 +1,35 @@
-import config from "config";
+import { IsNumber, IsString, Max, Min, validateSync } from 'class-validator';
+import { plainToInstance } from 'class-transformer';
 
-export interface DefaultConfig {
-    NODE_ENV?: string;
-    app: {
-        port: number;
-        apiPath: string;
-    };
-    /**
-     * @default "10min"
-     */
-    tokenExpiryTime: string | number;
+export class EnvVars {
+  @IsString()
+  APP_ENV: string;
+
+  @IsNumber()
+  @Min(0)
+  @Max(65535)
+  SERVICE_PORT: number;
 }
 
-export default (print = true) => {
-    const defaultConfig: DefaultConfig & Record<string, unknown> = {
-        NODE_ENV: process.env.NODE_ENV || "development",
-        app: {
-            port: Number(process.env.PORT) || Number(process.env.SERVICE_PORT) || (config?.has("servicePort") ? config?.get<number>("servicePort") : 5052),
-            apiPath: process.env.API_DOCS_PATH || "api"
-        },
-        tokenExpiryTime: process.env.HISTORY_TOKEN_EXPIRY_TIME || "10m"
-    };
+export const validateConfig = (config: Record<string, unknown>) => {
+  const validatedConfig = plainToInstance(EnvVars, config, { enableImplicitConversion: true });
 
-    if (print) {
-        console.log("LOADED CONFIGURATION", defaultConfig);
-    }
+  const errors = validateSync(validatedConfig, { skipMissingProperties: false });
 
-    return defaultConfig;
+  if (errors.length > 0) {
+    throw new Error(errors.toString());
+  }
+
+  return {
+    env: validatedConfig.APP_ENV,
+    isDev: !validatedConfig.APP_ENV || validatedConfig.APP_ENV === 'dev',
+    app: {
+      port: validatedConfig.SERVICE_PORT,
+      docs: {
+        apiPath: process.env.API_DOCS_PATH || 'api',
+      },
+    },
+  };
 };
+
+export type ValidatedConfig = ReturnType<typeof validateConfig>;
