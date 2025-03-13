@@ -21,10 +21,10 @@ h1 {
   line-height: 1;
   text-align: center;
   text-shadow:
-  -1px -1px 0 #c7987b,
-  -2px -2px 0 #a88973,
-  -3px -3px 0 #f0bfa1,
-  -30px 20px 40px #49070363;
+    -1px -1px 0 #c7987b,
+    -2px -2px 0 #a88973,
+    -3px -3px 0 #f0bfa1,
+    -30px 20px 40px #49070363;
 }
 
 .wisdom {
@@ -57,7 +57,7 @@ h1 {
 
 a.buttons:hover {
   background: transparent;
-  background-image: url("/images/f-1x.gif");
+  background-image: url('/images/f-1x.gif');
   border: 3px solid #000000;
 }
 
@@ -90,7 +90,7 @@ p.buttonsText {
 }
 
 .tooltip .tooltiptext::after {
-  content: "";
+  content: '';
   position: absolute;
   top: 100%;
   left: 50%;

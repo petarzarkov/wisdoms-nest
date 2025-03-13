@@ -6,3 +6,4 @@ coverage
 .env
 test.sh
 e2e.results.**
+.eslintcache

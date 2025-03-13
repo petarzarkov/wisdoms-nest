@@ -1,3 +1,2 @@
-export * from "./base.request";
-export * from "./base.response";
-export * from "./lang";
+export * from './base.request';
+export * from './lang';
