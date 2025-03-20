@@ -6,7 +6,8 @@ import { ServiceModule } from '@api/service/service.module';
 import { join } from 'path';
 import { validateConfig } from './const/config';
 import { resolve } from 'node:path';
-import { RequestIdMiddleware, HttpMiddleware } from '@middlewares';
+import { RequestIdMiddleware } from '@middlewares';
+import { HttpLoggerModule } from '@modules/http-logger/http-logger.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { RequestIdMiddleware, HttpMiddleware } from '@middlewares';
       validate: validateConfig,
       isGlobal: true,
     }),
+    HttpLoggerModule,
     ServiceModule,
     WisdomsModule,
     ServeStaticModule.forRoot({
@@ -24,6 +26,6 @@ import { RequestIdMiddleware, HttpMiddleware } from '@middlewares';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(RequestIdMiddleware, HttpMiddleware).forRoutes('*');
+    consumer.apply(RequestIdMiddleware).forRoutes('*');
   }
 }

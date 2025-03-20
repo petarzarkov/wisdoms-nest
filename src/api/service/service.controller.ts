@@ -23,7 +23,7 @@ export class ServiceController {
     };
   }
 
-  @Get('configcheck')
+  @Get('config')
   @ApiResponse({
     status: 200,
     description: 'Service config',
@@ -31,13 +31,13 @@ export class ServiceController {
   config() {
     return {
       version: process.env.npm_package_version,
-      ...this.configService,
+      app: this.configService.get('app'),
     };
   }
 
   @Get('upcheck')
   @ApiOperation({ summary: 'Check if service is up' })
   upCheck() {
-    return true;
+    return {};
   }
 }
