@@ -30,15 +30,11 @@
     "paths": {
       "@api/*": ["./src/api/*"],
       "@middlewares": ["./src/middlewares"],
-      "@contracts": ["./src/contracts"],
       "@const": ["./src/const"],
-      "@repos": ["./src/repos"],
-      "@models/*": ["./src/models/*"],
       "@modules/*": ["./src/modules/*"],
       "@utils": ["./src/utils"],
       "@interceptors/*": ["./src/interceptors/*"],
-      "@decorators/*": ["./src/decorators/*"],
-      "@filters/*": ["./src/filters/*"]
+      "@decorators/*": ["./src/decorators/*"]
     }
   }
 }

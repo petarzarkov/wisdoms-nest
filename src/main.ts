@@ -8,7 +8,6 @@ import { ConsoleLogger, ValidationPipe } from '@nestjs/common';
 import { NestFastifyApplication, FastifyAdapter } from '@nestjs/platform-fastify';
 import { v4 } from 'uuid';
 import { BEARER_TOKEN_DEFAULT, BEARER_TOKEN_DEFAULT_NAME, REQUEST_ID_HEADER_KEY, ValidatedConfig } from '@const';
-import { UnhandledRoutes } from '@filters/unhandled-routes';
 import { name, description, author, homepage, version } from '../package.json';
 
 async function bootstrap(module: typeof AppModule) {
@@ -38,8 +37,6 @@ async function bootstrap(module: typeof AppModule) {
   const configService = app.get(ConfigService<ValidatedConfig, true>);
   const appConfig = configService.get('app', { infer: true });
   const appEnv = configService.get('env', { infer: true });
-
-  app.useGlobalFilters(new UnhandledRoutes());
 
   app.enableShutdownHooks();
 

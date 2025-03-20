@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { WisdomsRequestParams } from './entities/wisdoms.request';
+import { WisdomRequestParams, WisdomsRequestParams } from './entities/wisdoms.request';
 import { WisdomResponse, WisdomsResponse } from './entities/wisdoms.response';
 import { wisdoms, wisdomParts } from '@const';
 
@@ -23,20 +23,38 @@ export class WisdomsService {
     return final[0]!.toUpperCase() + final.slice(1);
   };
 
-  async getWisdom(req: WisdomsRequestParams): Promise<WisdomResponse> {
-    const localWisdoms = wisdomParts[req.lang || 'en'];
+  async getWisdom(params: WisdomRequestParams): Promise<WisdomResponse> {
+    const localWisdoms = wisdomParts[params.lang];
     const randomWisdom = this.randomWisdom(localWisdoms);
 
     return Promise.resolve({
-      wisdom: randomWisdom || "Lying down you can't eat an apple, help yourself and god help you, mind to the ankles.",
+      wisdom: randomWisdom,
     });
   }
 
-  async getWisdoms(req: WisdomsRequestParams): Promise<WisdomsResponse> {
-    const localWisdoms = wisdoms[req.lang || 'en'];
+  async getWisdoms(params: WisdomsRequestParams): Promise<WisdomsResponse> {
+    const { offset, limit, lang } = params;
+    const localWisdoms = wisdoms[lang];
+    const total = localWisdoms.length;
+
+    const endIndex = Math.min(offset + limit, total);
+    const remaining = Math.max(0, total - endIndex);
+    const currentPageWisdoms = localWisdoms.slice(offset, endIndex);
+    const previousOffset = Math.max(0, offset - limit);
+    const nextOffset = endIndex < total ? endIndex : null;
+    const previous = offset > 0 ? `/api/wisdoms?lang=${lang}&offset=${previousOffset}&limit=${limit}` : null;
+    const next = nextOffset !== null ? `/api/wisdoms?lang=${lang}&offset=${nextOffset}&limit=${limit}` : null;
 
     return Promise.resolve({
-      wisdoms: localWisdoms,
+      pagination: {
+        offset,
+        limit,
+        total,
+        remaining,
+        previous,
+        next,
+      },
+      wisdoms: currentPageWisdoms,
     });
   }
 }
