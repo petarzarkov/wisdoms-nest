@@ -1,5 +1,5 @@
 const getRandomEmote = async (size = '1x') => {
-  const res = await (await fetch('https://api.betterttv.net/3/emotes/shared/trending?offset=0&limit=50')).json();
+  const res = await (await fetch('https://api.betterttv.net/3/emotes/shared/trending?limit=50')).json();
   const random = res[Math.floor(Math.random() * Math.floor(res.length))];
   if (random?.emote) {
     return `https://cdn.betterttv.net/emote/${random.emote.id}/${size}`;
