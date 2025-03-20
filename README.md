@@ -1,11 +1,11 @@
 ## Check it out here
 
-- [App](https://stale-lula-zarkov-dc6f9d78.koyeb.app/)
-- [API docs](https://stale-lula-zarkov-dc6f9d78.koyeb.app/api)
+- [App](https://wisdoms.petarzarkov.com/)
+- [API docs](https://wisdoms.petarzarkov.com//api)
 
 <div align="center">
     <h1>🔥 Wisdoms App 🔥</h1>
-	<p>Constructs random widoms in english or bulgarian</p>
+	<p>Spews random wisdoms in english or bulgarian</p>
     <a href="https://github.com/petarzarkov/wisdoms-nest/actions/"><img src="https://github.com/petarzarkov/wisdoms-nest/actions/workflows/build.yml/badge.svg?branch=main" alt="Build status"></a>
 	<a href="https://github.com/petarzarkov/wisdoms-nest/blob/main/LICENSE"><img src="https://img.shields.io/github/license/petarzarkov/wisdoms-nest" alt="License"></a>
     <p style="color: gray;">Stack</p>
